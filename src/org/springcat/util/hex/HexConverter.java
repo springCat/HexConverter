@@ -9,12 +9,18 @@ public class HexConverter
     
     private int scale;
     
+    private int maxStringLen;
+
+    
     /**
      * default
      */
     public HexConverter(){
-        this.scale = 62;
-        this.salt = raw;
+        this(raw);
+    }
+    
+    public HexConverter(String salt){   
+        this(salt,salt.length());
     }
     
     public HexConverter(String salt,int scale){
@@ -28,6 +34,7 @@ public class HexConverter
         
         this.scale = scale;
         this.salt = salt;
+        this.maxStringLen = this.encode(Long.MAX_VALUE).length();
     }
     
     private Character getC(Long i){
@@ -73,14 +80,56 @@ public class HexConverter
     public long decode(String s){
         if(s == null || s.trim().length() == 0){
             return -1L;
-        }   
+        }
+        long multiple = 1;
+        long result = 0;
+        Character c;
+        int len = s.length();
+        long maxScale = Long.MAX_VALUE/scale;
+        for (int i = 0; i < len; i++){
+            c = s.charAt(len - i - 1); 
+            int index = getI(c);
+            if(index > Long.MAX_VALUE || Long.MAX_VALUE/ multiple < index ){
+                throw new RuntimeException("out of the Long range");
+            }
+            long v = index*multiple;
+            if(Long.MAX_VALUE - v < result){
+                throw new RuntimeException("out of the Long range");
+            }
+            result += v;
+            if(i == len -1){
+                break;
+            }else{
+                if (multiple > maxScale ){
+                    throw new RuntimeException("out of the Long range");
+                }
+                multiple *=  scale;
+            }
+        }
+        return result;
+    }
+    
+    /**
+     *  return -1 if s is empty
+     * 
+     *
+     * @author springcat
+     * @param s
+     * @return
+     */
+    public long decodeFst(String s){
+        if(s == null || s.trim().length() == 0 || s.length() >= this.maxStringLen){
+            return -1L;
+        }
         long multiple = 1;
         long result = 0;
         Character c;
         int len = s.length();
         for (int i = 0; i < len; i++){
-            c = s.charAt(len - i - 1);
-            result += getI(c) * multiple;
+            c = s.charAt(len - i - 1); 
+            int index = getI(c);      
+            long v = index * multiple;
+            result += v;
             multiple *=  scale;
         }
         return result;

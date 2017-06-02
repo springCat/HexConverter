@@ -15,6 +15,11 @@ public class SaltGenerator
     public SaltGenerator(String salt){
         this.salt = salt;
     }
+    
+    
+    public String generateSalt(){
+      return generateSalt(salt.length());
+    }
     /**
      * length must > 2 and default < salt.length
      * 

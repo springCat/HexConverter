@@ -106,6 +106,42 @@ public class Test {
         Long i2min = c2.decode(c2min);
         System.out.println("i2min:"+i2min);    
         System.out.println("-------2 end------");
+        
+        
+        System.out.println("-------94 start------");
+        String salt = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ~`!@#$%^&*()_-+={[}]|\\:;\"'<,>.?/ ";
+        System.out.println("salt length:"+salt.length());
+        SaltGenerator gen95 = new SaltGenerator(salt);
+        String salt95 = gen95.generateSalt();
+        System.out.println("salt95:"+salt95);
+        
+        HexConverter c95 = new HexConverter(salt95);
+        System.out.println("max:"+max);
+        String c95max = c95.encode(max);
+        System.out.println("cmax:"+c95max);
+        Long i95max = c95.decode(c95max);
+        System.out.println("imax:"+i95max);
+        
+        System.out.println("zero:"+zero);
+        String c95zero = c95.encode(zero);
+        System.out.println("c95zero:"+c95zero);
+        Long i95zero = c95.decode(c95zero);
+        System.out.println("i95zero:"+i95zero);
+        
+        
+        System.out.println("min:"+min);
+        String c95min = c95.encode(min);
+        System.out.println("c95min:"+c95min);
+        Long i95min = c95.decode(c95min);
+        System.out.println("i95min:"+i95min);    
+        System.out.println("-------95 end------");
+        
+       System.out.println(Long.MAX_VALUE);
+        System.out.println(c.encode(Long.MAX_VALUE)); 
+        System.out.println(c.decodeFst("aZl8N0y58M8"));
+        System.out.println(c.encode(c.decode("aZl8N0y58M7")));
+        System.out.println(c.decode("aZl8N0y58M7"));
+
     }
 
 }
